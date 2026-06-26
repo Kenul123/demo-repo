@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Y2K Modern - Enterprise Design</title>
+    <title>ARCADE ZONE 2K</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,21 +15,24 @@
         }
 
         :root {
-            --bg-primary: #0F1119;
-            --bg-secondary: #16171D;
-            --bg-tertiary: #1C1E27;
-            --text-primary: #E8E9EB;
-            --text-secondary: #A0A2A8;
-            --text-tertiary: #78797F;
-            --accent: #4A90E2;
-            --accent-dark: #2E5FC2;
-            --border: #2A2D35;
-            --border-light: #353A44;
+            --neon-pink: #FF006E;
+            --neon-cyan: #00D9FF;
+            --neon-yellow: #FFBE0B;
+            --neon-green: #05FFA1;
+            --neon-purple: #B537F2;
+            --arcade-dark: #0a0e27;
+            --arcade-darker: #050812;
+        }
+
+        @font-face {
+            font-family: 'Arcade';
+            src: url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--bg-primary);
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(180deg, var(--arcade-darker) 0%, var(--arcade-dark) 50%, var(--arcade-darker) 100%);
+            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -37,9 +40,15 @@
             color: var(--text-primary);
             overflow-x: hidden;
             position: relative;
+            animation: arcadeFlicker 0.15s infinite;
         }
 
-        /* Subtle animated gradient background */
+        @keyframes arcadeFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.97; }
+        }
+
+        /* CRT scanlines effect */
         body::before {
             content: '';
             position: fixed;
@@ -47,340 +56,425 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 20% 50%, rgba(74, 144, 226, 0.04) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 50%, rgba(74, 144, 226, 0.02) 0%, transparent 50%);
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
             pointer-events: none;
-            z-index: 0;
-            animation: subtleGlow 20s ease-in-out infinite;
+            z-index: 100;
+            animation: scanlines 8s linear infinite;
         }
 
-        @keyframes subtleGlow {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
         }
 
-        .container {
+        /* Arcade cabinet frame */
+        .arcade-frame {
             position: relative;
             z-index: 2;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 56px 48px;
-            max-width: 720px;
-            width: 90%;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4),
-                        inset 0 1px 1px rgba(255, 255, 255, 0.05);
-            animation: fadeIn 0.6s ease-out;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 8px solid;
+            border-color: var(--neon-cyan) var(--neon-pink) var(--neon-yellow) var(--neon-purple);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 700px;
+            width: 92%;
+            box-shadow: 
+                0 0 40px var(--neon-cyan),
+                0 0 80px var(--neon-pink),
+                inset 0 0 30px rgba(0, 0, 0, 0.8),
+                inset 0 2px 0 rgba(255, 255, 255, 0.1);
+            animation: cabinetGlow 3s ease-in-out infinite;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
+        @keyframes cabinetGlow {
+            0%, 100% {
+                box-shadow: 
+                    0 0 40px var(--neon-cyan),
+                    0 0 80px var(--neon-pink),
+                    inset 0 0 30px rgba(0, 0, 0, 0.8),
+                    inset 0 2px 0 rgba(255, 255, 255, 0.1);
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            50% {
+                box-shadow: 
+                    0 0 50px var(--neon-cyan),
+                    0 0 100px var(--neon-pink),
+                    inset 0 0 30px rgba(0, 0, 0, 0.8),
+                    inset 0 2px 0 rgba(255, 255, 255, 0.1);
             }
         }
 
-        h1 {
-            font-size: 2.8em;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-            letter-spacing: -0.6px;
+        /* Screen display */
+        .screen {
+            background: linear-gradient(135deg, #001a33 0%, #002a52 100%);
+            border: 4px solid var(--neon-cyan);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 
+                inset 0 0 20px rgba(0, 217, 255, 0.3),
+                0 0 20px var(--neon-cyan);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 217, 255, 0.03),
+                rgba(0, 217, 255, 0.03) 2px,
+                transparent 2px,
+                transparent 4px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .screen-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .game-title {
+            font-size: 1.8em;
+            color: var(--neon-yellow);
+            text-shadow: 
+                0 0 10px var(--neon-yellow),
+                0 0 20px var(--neon-pink),
+                2px 2px 0 var(--neon-cyan);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            animation: titlePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { 
+                text-shadow: 
+                    0 0 10px var(--neon-yellow),
+                    0 0 20px var(--neon-pink),
+                    2px 2px 0 var(--neon-cyan);
+            }
+            50% { 
+                text-shadow: 
+                    0 0 20px var(--neon-yellow),
+                    0 0 40px var(--neon-pink),
+                    2px 2px 0 var(--neon-cyan);
+            }
         }
 
         .subtitle {
-            color: var(--text-secondary);
-            font-size: 0.95em;
-            margin-bottom: 40px;
-            font-weight: 400;
-            letter-spacing: 0.3px;
+            font-size: 0.6em;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+            margin-bottom: 20px;
+            letter-spacing: 1px;
         }
 
         .divider {
-            height: 1px;
-            background: var(--border);
-            margin: 32px 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-pink), transparent);
+            margin: 20px 0;
+            box-shadow: 0 0 10px var(--neon-pink);
         }
 
-        .content-section {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            padding: 24px;
-            margin: 24px 0;
-            transition: all 0.3s ease;
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            font-size: 0.5em;
+            color: var(--neon-green);
+            text-shadow: 0 0 5px var(--neon-green);
+            border: 2px solid var(--neon-green);
+            padding: 10px;
+            border-radius: 4px;
+            background: rgba(5, 255, 161, 0.05);
         }
 
-        .content-section:hover {
-            border-color: var(--border);
-            background: rgba(28, 30, 39, 0.8);
+        .score-display {
+            text-align: left;
         }
 
-        .content-section h2 {
-            font-size: 1.3em;
-            margin-bottom: 12px;
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        .content-section p {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            font-size: 0.9em;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 16px;
-        }
-
-        .feature-item {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 12px;
+        .level-display {
             text-align: center;
-            transition: all 0.3s ease;
-            cursor: default;
         }
 
-        .feature-item:hover {
-            border-color: var(--accent);
-            background: rgba(74, 144, 226, 0.05);
+        .lives-display {
+            text-align: right;
         }
 
-        .feature-icon {
-            font-size: 1.8em;
-            margin-bottom: 6px;
+        /* Game screen content */
+        .combo-display {
+            font-size: 1.2em;
+            color: var(--neon-pink);
+            text-shadow: 
+                0 0 10px var(--neon-pink),
+                2px 2px 0 var(--neon-cyan);
+            margin: 15px 0;
+            animation: comboPulse 0.5s ease-out;
         }
 
-        .feature-text {
-            font-size: 0.8em;
-            color: var(--text-secondary);
-            font-weight: 500;
+        @keyframes comboPulse {
+            0% { 
+                font-size: 1.5em;
+                opacity: 1;
+            }
+            100% { 
+                font-size: 1.2em;
+                opacity: 0.8;
+            }
+        }
+
+        .counter-value {
+            font-size: 2.5em;
+            color: var(--neon-yellow);
+            text-shadow: 
+                0 0 20px var(--neon-yellow),
+                0 0 40px var(--neon-pink),
+                3px 3px 0 var(--neon-cyan);
+            margin: 20px 0;
+            font-weight: bold;
+            animation: screenGlow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes screenGlow {
+            0%, 100% { 
+                text-shadow: 
+                    0 0 20px var(--neon-yellow),
+                    0 0 40px var(--neon-pink),
+                    3px 3px 0 var(--neon-cyan);
+            }
+            50% { 
+                text-shadow: 
+                    0 0 30px var(--neon-yellow),
+                    0 0 60px var(--neon-pink),
+                    3px 3px 0 var(--neon-cyan);
+            }
+        }
+
+        /* Control panel */
+        .controls {
+            background: linear-gradient(180deg, #2a2a3e 0%, #1a1a2e 100%);
+            border: 4px solid var(--neon-purple);
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 25px;
+            box-shadow: 
+                0 0 15px var(--neon-purple),
+                inset 0 2px 0 rgba(255, 255, 255, 0.1);
         }
 
         .button-group {
             display: flex;
-            gap: 10px;
-            margin-top: 32px;
+            gap: 12px;
             justify-content: center;
             flex-wrap: wrap;
+            margin-bottom: 20px;
         }
 
         button {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9em;
-            font-weight: 500;
-            padding: 10px 24px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.5em;
+            padding: 15px 25px;
             border: none;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            letter-spacing: 0.3px;
-        }
-
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
-        }
-
-        .btn-primary:hover {
-            background: var(--accent-dark);
-            box-shadow: 0 6px 16px rgba(74, 144, 226, 0.3);
-            transform: translateY(-1px);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .btn-secondary {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-light);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--accent);
-            background: rgba(74, 144, 226, 0.08);
-            color: var(--text-primary);
-        }
-
-        .counter-display {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            padding: 28px;
-            text-align: center;
-            margin-top: 28px;
-        }
-
-        .counter-label {
-            color: var(--text-tertiary);
-            font-size: 0.8em;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
-            margin-bottom: 12px;
-            font-weight: 600;
+            font-weight: bold;
+            transition: all 0.1s;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .counter-value {
-            font-size: 3.2em;
-            font-weight: 700;
-            color: var(--accent);
-            font-variant-numeric: tabular-nums;
+        .btn-play {
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-yellow));
+            color: #000;
+            box-shadow: 
+                0 8px 0 rgba(255, 0, 110, 0.5),
+                0 0 20px var(--neon-pink);
+            border: 3px solid var(--neon-pink);
         }
 
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 28px;
-            gap: 16px;
+        .btn-play:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 10px 0 rgba(255, 0, 110, 0.7),
+                0 0 30px var(--neon-pink);
         }
 
-        .stat-item {
+        .btn-play:active {
+            transform: translateY(6px);
+            box-shadow: 
+                0 2px 0 rgba(255, 0, 110, 0.7),
+                0 0 10px var(--neon-pink);
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-green));
+            color: #000;
+            box-shadow: 
+                0 8px 0 rgba(0, 217, 255, 0.5),
+                0 0 20px var(--neon-cyan);
+            border: 3px solid var(--neon-cyan);
+        }
+
+        .btn-reset:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 10px 0 rgba(0, 217, 255, 0.7),
+                0 0 30px var(--neon-cyan);
+        }
+
+        .btn-reset:active {
+            transform: translateY(6px);
+            box-shadow: 
+                0 2px 0 rgba(0, 217, 255, 0.7),
+                0 0 10px var(--neon-cyan);
+        }
+
+        /* Stats panel */
+        .stats-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid var(--neon-green);
+            border-radius: 4px;
+            padding: 12px;
             text-align: center;
-            flex: 1;
+            box-shadow: inset 0 0 10px rgba(5, 255, 161, 0.2);
         }
 
         .stat-value {
-            font-size: 1.6em;
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 4px;
+            font-size: 1.2em;
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
+            margin-bottom: 5px;
         }
 
         .stat-label {
-            font-size: 0.75em;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
+            font-size: 0.35em;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 5px var(--neon-cyan);
         }
 
-        footer {
-            margin-top: 36px;
-            padding-top: 28px;
-            border-top: 1px solid var(--border);
-            text-align: center;
-            color: var(--text-tertiary);
-            font-size: 0.8em;
-            letter-spacing: 0.3px;
+        /* Marquee effect */
+        .marquee {
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--neon-yellow);
+            border-radius: 4px;
+            padding: 8px;
+            margin-top: 15px;
+            box-shadow: 0 0 10px var(--neon-yellow);
         }
 
-        footer p {
-            margin: 6px 0;
+        .marquee-text {
+            font-size: 0.4em;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px var(--neon-yellow);
+            white-space: nowrap;
+            animation: marquee 8s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
 
         @media (max-width: 600px) {
-            .container {
-                padding: 36px 24px;
+            .arcade-frame {
+                padding: 25px;
             }
 
-            h1 {
-                font-size: 2.2em;
+            .game-title {
+                font-size: 1.2em;
             }
 
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .button-group {
-                flex-direction: column;
+            .counter-value {
+                font-size: 1.8em;
             }
 
             button {
-                width: 100%;
+                font-size: 0.4em;
+                padding: 12px 18px;
             }
 
-            .stats {
-                flex-direction: column;
+            .stats-panel {
+                grid-template-columns: 1fr;
             }
-        }
-
-        /* Smooth focus states for accessibility */
-        button:focus-visible {
-            outline: 2px solid var(--accent);
-            outline-offset: 2px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Y2K Modern</h1>
-        <p class="subtitle">Enterprise-grade design with subtle Y2K elements</p>
+    <div class="arcade-frame">
+        <div class="screen">
+            <div class="screen-content">
+                <div class="game-title">★ ARCADE ZONE 2K ★</div>
+                <div class="subtitle">>> CLICK COUNTER EDITION <<</div>
+                
+                <div class="status-bar">
+                    <div class="score-display">SCORE: <span id="stat-clicks">0</span></div>
+                    <div class="level-display">LEVEL: 1</div>
+                    <div class="lives-display">LIVES: ∞</div>
+                </div>
 
-        <div class="divider"></div>
+                <div class="divider"></div>
 
-        <div class="content-section">
-            <h2>Overview</h2>
-            <p>A premium interface combining professional design principles with refined modern aesthetics. Built for performance and user experience.</p>
-            
-            <div class="features-grid">
-                <div class="feature-item">
-                    <div class="feature-icon">⚙️</div>
-                    <div class="feature-text">Precision</div>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">🎯</div>
-                    <div class="feature-text">Focus</div>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">⚡</div>
-                    <div class="feature-text">Performance</div>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">📱</div>
-                    <div class="feature-text">Responsive</div>
+                <div class="combo-display" id="combo">GET CLICKING!</div>
+                
+                <div class="counter-value" id="count">0</div>
+
+                <div style="font-size: 0.45em; color: var(--neon-cyan); text-shadow: 0 0 5px var(--neon-cyan); margin: 15px 0;">
+                    >>> PRESS SPACEBAR OR CLICK <<<
                 </div>
             </div>
         </div>
 
-        <div class="divider"></div>
-
-        <div class="content-section">
-            <h2>Interactive Counter</h2>
-            <p>Engage with our responsive counter system. Engineered for performance with smooth, professional interactions.</p>
-        </div>
-
-        <div class="counter-display">
-            <div class="counter-label">Total Interactions</div>
-            <div class="counter-value" id="count">0</div>
-        </div>
-
-        <div class="button-group">
-            <button class="btn-primary" onclick="incrementCounter()">Increment</button>
-            <button class="btn-secondary" onclick="resetCounter()">Reset</button>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="stats">
-            <div class="stat-item">
-                <div class="stat-value" id="stat-clicks">0</div>
-                <div class="stat-label">Interactions</div>
+        <div class="controls">
+            <div class="button-group">
+                <button class="btn-play" onclick="incrementCounter()">► PLAY</button>
+                <button class="btn-reset" onclick="resetCounter()">↻ RESET</button>
             </div>
-            <div class="stat-item">
-                <div class="stat-value">∞</div>
-                <div class="stat-label">Capacity</div>
+
+            <div class="stats-panel">
+                <div class="stat-box">
+                    <div class="stat-value" id="max-combo">0x</div>
+                    <div class="stat-label">MAX COMBO</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">∞</div>
+                    <div class="stat-label">CAPACITY</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">EPIC</div>
+                </div>
             </div>
-            <div class="stat-item">
-                <div class="stat-value">100%</div>
-                <div class="stat-label">Uptime</div>
+
+            <div class="marquee">
+                <div class="marquee-text">
+                    ★ KEEP CLICKING FOR COMBOS! ★ BREAK THE HIGH SCORE! ★ GET MAX COMBO! ★ 
+                </div>
             </div>
         </div>
-
-        <footer>
-            <p>&copy; 2026 Y2K Modern. All rights reserved.</p>
-            <p>Crafted with precision and modern web technologies.</p>
-        </footer>
     </div>
 
     <script src="script.js"></script>
