@@ -5,62 +5,64 @@ let clickCount = 0;
 function incrementCounter() {
     clickCount++;
     updateDisplay();
-    playClickSound();
-    createConfetti();
-    console.log('🎮 Button clicked! Total clicks:', clickCount);
+    playSound();
+    createParticle();
 }
 
 // Reset counter function
 function resetCounter() {
     clickCount = 0;
     updateDisplay();
-    console.log('🔄 Counter reset to 0');
 }
 
 // Update the display
 function updateDisplay() {
-    document.getElementById('count').textContent = clickCount;
+    const countElement = document.getElementById('count');
+    const statElement = document.getElementById('stat-clicks');
     
-    // Add a pulse effect
-    const counter = document.querySelector('.counter');
-    counter.style.animation = 'none';
+    // Animate the counter update
+    countElement.style.animation = 'none';
+    statElement.style.animation = 'none';
+    
     setTimeout(() => {
-        counter.style.animation = 'pulse 0.5s ease-in-out';
+        countElement.textContent = clickCount;
+        statElement.textContent = clickCount;
+        countElement.style.animation = 'scaleUp 0.4s ease-out';
+        statElement.style.animation = 'scaleUp 0.4s ease-out';
     }, 10);
 }
 
-// Create confetti effect
-function createConfetti() {
-    const confetti = document.createElement('div');
-    confetti.style.position = 'fixed';
-    confetti.style.left = Math.random() * window.innerWidth + 'px';
-    confetti.style.top = '-20px';
-    confetti.style.fontSize = '2em';
-    confetti.style.zIndex = '9999';
-    confetti.style.pointerEvents = 'none';
+// Create subtle particle effect
+function createParticle() {
+    const particle = document.createElement('div');
+    particle.style.position = 'fixed';
+    particle.style.left = Math.random() * window.innerWidth + 'px';
+    particle.style.top = Math.random() * window.innerHeight + 'px';
+    particle.style.width = '4px';
+    particle.style.height = '4px';
+    particle.style.borderRadius = '50%';
+    particle.style.pointerEvents = 'none';
+    particle.style.zIndex = '999';
     
-    const emoji = ['🎉', '⭐', '✨', '🌟', '💫', '🎊', '🎈', '🎆'][Math.floor(Math.random() * 8)];
-    confetti.textContent = emoji;
+    const colors = ['rgba(0, 212, 255, 0.8)', 'rgba(217, 70, 239, 0.8)', 'rgba(16, 185, 129, 0.8)'];
+    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
     
-    document.body.appendChild(confetti);
+    document.body.appendChild(particle);
     
-    let top = -20;
     let opacity = 1;
     const interval = setInterval(() => {
-        top += 3;
-        opacity -= 0.02;
-        confetti.style.top = top + 'px';
-        confetti.style.opacity = opacity;
+        opacity -= 0.05;
+        particle.style.opacity = opacity;
         
         if (opacity <= 0) {
             clearInterval(interval);
-            confetti.remove();
+            particle.remove();
         }
-    }, 10);
+    }, 30);
 }
 
-// Play retro click sound effect (using Web Audio API)
-function playClickSound() {
+// Play subtle sound effect
+function playSound() {
     try {
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const oscillator = audioContext.createOscillator();
@@ -69,55 +71,44 @@ function playClickSound() {
         oscillator.connect(gainNode);
         gainNode.connect(audioContext.destination);
         
-        oscillator.frequency.value = 800;
-        oscillator.type = 'square';
+        // Higher pitch, shorter duration for modern feel
+        oscillator.frequency.value = 1200;
+        oscillator.type = 'sine';
         
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.08);
         
         oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.1);
+        oscillator.stop(audioContext.currentTime + 0.08);
     } catch (e) {
-        console.log('Sound not supported in this browser');
+        // Silent fail
     }
 }
 
-// Create starfield effect
-function createStars() {
-    const starsContainer = document.getElementById('stars');
-    for (let i = 0; i < 50; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
-        star.style.width = Math.random() * 3 + 'px';
-        star.style.height = star.style.width;
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        star.style.animationDelay = Math.random() * 3 + 's';
-        starsContainer.appendChild(star);
-    }
-}
-
-// Page load message and initialization
-window.addEventListener('load', function() {
-    console.log('%c🌟 WELCOME TO THE Y2K ZONE! 🌟', 'font-size: 20px; color: #FF00FF; text-shadow: 2px 2px #00FF00;');
-    console.log('%c✨ This website has been blessed with early 2000s energy! ✨', 'font-size: 14px; color: #00CCFF;');
-    console.log('%c🎮 Click the buttons to interact with this totally awesome page! 🎮', 'font-size: 12px; color: #FFFF00;');
-    
-    // Create starfield
-    createStars();
-    
-    // Add pulse animation for counter
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+// Add animation styles dynamically
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes scaleUp {
+        0% {
+            transform: scale(1);
         }
-    `;
-    document.head.appendChild(style);
+        50% {
+            transform: scale(1.15);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+`;
+document.head.appendChild(style);
+
+// Page load initialization
+window.addEventListener('load', function() {
+    console.log('%cWelcome to Y2K Modern', 'font-size: 16px; color: #00D4FF; font-weight: bold;');
+    console.log('%cProfessional design meets nostalgic vibes', 'font-size: 12px; color: #A0A0B8;');
 });
 
-// Add keyboard support
+// Keyboard support
 document.addEventListener('keydown', function(event) {
     if (event.code === 'Space') {
         event.preventDefault();
